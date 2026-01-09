@@ -14,23 +14,30 @@ connectDB();
 
 const app = express();
 
-const corsOptions = {
-	origin: function (origin, callback) {
-		const allowedOrigins = [
-			"https://task-drab-seven.vercel.app/",
-			"https://www.task-drab-seven.vercel.app/",
-		];
+app.use((req, res, next) => {
+	res.header(
+		"Access-Control-Allow-Origin",
+		"https://task-drab-seven.vercel.app"
+	);
+	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Specify allowed methods
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept, Authorization"
+	);
+	next();
+});
 
-		if (!origin || allowedOrigins.includes(origin)) {
-			callback(null, true);
-		} else {
-			callback(new Error("Not allowed by CORS"));
-		}
-	},
-	methods: ["GET", "POST", "PUT", "DELETE"],
-	allowedHeaders: ["Content-Type", "Authorization"],
+const corsOptions = {
+	origin: "https://task-drab-seven.vercel.app",
+	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	allowedHeaders: [
+		"Origin",
+		"X-Requested-With",
+		"Content-Type",
+		"Accept",
+		"Authorization",
+	],
 	credentials: true,
-	maxAge: 86400,
 };
 
 app.use(cors(corsOptions));
