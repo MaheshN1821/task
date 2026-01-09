@@ -10,20 +10,15 @@ const logger = winston.createLogger({
 	),
 	defaultMeta: { service: "scalable-app-backend" },
 	transports: [
-		new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-		new winston.transports.File({ filename: "logs/combined.log" }),
-	],
-});
-
-if (process.env.NODE_ENV !== "production") {
-	logger.add(
+		// File transports removed - don't work in serverless
 		new winston.transports.Console({
 			format: winston.format.combine(
-				winston.format.colorize(),
-				winston.format.simple()
+				winston.format.timestamp(),
+				winston.format.errors({ stack: true }),
+				winston.format.json()
 			),
-		})
-	);
-}
+		}),
+	],
+});
 
 export default logger;
